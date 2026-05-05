@@ -30,7 +30,7 @@ class Product
     private ?string $type = null;
 
     #[ORM\Column]
-    private ?bool $available = null;
+    private bool $available = true;
 
     public function getId(): ?int
     {
@@ -85,7 +85,7 @@ class Product
         return $this;
     }
 
-    public function isAvailable(): ?bool
+    public function isAvailable(): bool
     {
         return $this->available;
     }
