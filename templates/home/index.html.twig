@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}Menu du jour{% endblock %}
+
+{% macro card(p, isUser) %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ p.name }}</h5>
+                <p class="card-text">{{ p.description }}</p>
+                <p class="fw-bold mb-0">{{ p.price }} €</p>
+            </div>
+            <div class="card-footer bg-transparent">
+                {% if isUser %}
+                    <form method="post" action="{{ path('app_cart_add', {id: p.id}) }}">
+                        <button class="btn btn-primary btn-sm w-100">Ajouter au panier</button>
+                    </form>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-secondary btn-sm w-100">
+                        Se connecter pour commander
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% block body %}
+    <h1 class="mb-4">Menu du jour</h1>
+
+    <h2 class="h4 mt-4">Plats</h2>
+    <div class="row">
+        {% for p in plats %}{{ _self.card(p, app.user is not null) }}{% endfor %}
+    </div>
+
+    <h2 class="h4 mt-4">Desserts</h2>
+    <div class="row">
+        {% for p in desserts %}{{ _self.card(p, app.user is not null) }}{% endfor %}
+    </div>
+{% endblock %}

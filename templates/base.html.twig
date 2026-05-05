@@ -1,23 +1,40 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CityLunch{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">🥖 CityLunch</a>
+        <div class="ms-auto d-flex gap-2">
+            {% if app.user %}
+                <span class="navbar-text text-white">{{ app.user.firstName }}</span>
+                <a class="btn btn-outline-light btn-sm" href="{{ path('app_cart') }}">
+                    Panier ({{ cart_count() }})
+                </a>
+                <a class="btn btn-outline-light btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
+            {% else %}
+                <a class="btn btn-outline-light btn-sm" href="{{ path('app_login') }}">Connexion</a>
+                <a class="btn btn-light btn-sm" href="{{ path('app_register') }}">Inscription</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
-        {% block javascripts %}
-        {% endblock %}
+<div class="container py-4">
+    {% for label, messages in app.flashes %}
+        {% for m in messages %}
+            <div class="alert alert-{{ label == 'success' ? 'success' : 'warning' }}">{{ m }}</div>
+        {% endfor %}
+    {% endfor %}
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    {% block body %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
